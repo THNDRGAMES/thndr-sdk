@@ -1,7 +1,7 @@
 # Clinch SDK
 
 ## Overview
-This project provides a reference implementation for integrating the Clinch SDK into an iFrame. It includes a simple HTTP server setup, a reference HTML file (`index.html`), and the SDK JavaScript file (`clinch-sdk.js`). Follow the instructions below to get started.
+This project provides a reference implementation for integrating the Clinch SDK to show the web app in an iFrame. It includes a simple HTTP server setup, a reference HTML file (`index.html`), and the SDK JavaScript file (`clinch-sdk.js`). Follow the instructions below to get started.
 
 ## Installation and Running the HTTP Server
 
@@ -43,7 +43,7 @@ This configuration ensures that the server does not cache any content, which is 
 
 ## Example implementation `index.html`
 
-The `index.html` file serves as a reference implementation for integrating the Clinch Operator SDK. Here's a quick overview of its structure and how you can use it:
+The `index.html` file serves as a reference implementation for integrating the Clinch SDK and web app. Here's a quick overview of its structure and how you can use it:
 
 ### Purpose of `index.html`
 This file sets up an iframe that points to the Clinch operator and includes a script to load the Clinch SDK.
