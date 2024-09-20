@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clinch</title>
+  </head>
+  <body>
+    <iframe src="https://operator-fe-750747501640.us-central1.run.app" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
+        Your browser doesn't support iframes
+    </iframe>
+    <script type="module">
+      import { loadClinch } from './clinch-sdk.js';
+
+      // Define the callback function to get the token
+      function getToken() {
+        return "AUTH_TOKEN"; // Replace with the auth token returned by your auth API
+      }
+
+      const CLINCH_URL = "https://operator-fe-750747501640.us-central1.run.app";
+      const REDIRECT_URL = "https://yourwebsite.com"; // This is the url you wish to redirect back to. (optional)
+
+      loadClinch(CLINCH_URL, REDIRECT_URL, getToken);
+    </script>
+  </body>
+</html>
