@@ -11,16 +11,40 @@
     </iframe>
     <script type="module">
       import { loadClinch } from './clinch-sdk.js';
-
-      // Define the callback function to get the token
+    
+      const config = {
+        clinchUrl: "https://operator-fe-750747501640.us-central1.run.app",
+        balanceCurrency: "USD",
+        showBalance: true,
+        hostName: "Company Name",
+        debug: true,
+      };
+    
       function getToken() {
-        return "AUTH_TOKEN"; // Replace with the auth token returned by your auth API
+        console.log("Get the server to server thndr authentication token");
+        return "AUTH_TOKEN";
       }
-
-      const CLINCH_URL = "https://operator-fe-750747501640.us-central1.run.app";
-      const REDIRECT_URL = "https://yourwebsite.com"; // This is the url you wish to redirect back to. (optional)
-
-      loadClinch(CLINCH_URL, REDIRECT_URL, getToken);
+    
+      function getBalance() {
+        console.log("Return user balance");
+        return 10;
+      }
+    
+      function closeClinch() {
+        console.log("Close clinch");
+      }
+    
+      function payInvoice(invoice) {
+        console.log("Pay invoice", invoice);
+      }
+    
+      loadClinch(
+        config,
+        getToken,
+        getBalance,
+        closeClinch,
+        payInvoice
+      );
     </script>
   </body>
 </html>
