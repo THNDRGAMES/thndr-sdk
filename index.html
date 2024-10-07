@@ -6,21 +6,44 @@
     <title>Clinch</title>
   </head>
   <body>
-    <iframe src="https://operator-fe-750747501640.us-central1.run.app" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
+    <!-- replace http://example.com with clinch iframe url from thndr -->
+    <iframe src="http://example.com" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
         Your browser doesn't support iframes
     </iframe>
     <script type="module">
       import { loadClinch } from './clinch-sdk.js';
-
-      // Define the callback function to get the token
+    
+      const config = {
+        operatorId: 'Operator ID', // Get from THNDR
+        clinchUrl: "http://example.com", // Get from THNDR
+        companyName: "Company Name", // Get from THNDR
+        paymentType: "lightning",
+        showSats: true,
+        logging: true,
+      };
+    
       function getToken() {
-        return "AUTH_TOKEN"; // Replace with the auth token returned by your auth API
+        console.log("Clinch SDK: Get the server to server thndr authentication token");
+        return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.....";
       }
-
-      const CLINCH_URL = "https://operator-fe-750747501640.us-central1.run.app";
-      const REDIRECT_URL = "https://yourwebsite.com"; // This is the url you wish to redirect back to. (optional)
-
-      loadClinch(CLINCH_URL, REDIRECT_URL, getToken);
+    
+      function getBalance() {
+        return {
+          balance: 0,
+          currency: "cents", // Must be either - sats, btc, or cents (USD)
+        };
+      }
+    
+      function onPayInvoice(invoice) {
+        console.log("Pay invoice", invoice);
+      }
+    
+      loadClinch(
+        config,
+        getToken,
+        getBalance,
+        onPayInvoice
+      );
     </script>
   </body>
 </html>
