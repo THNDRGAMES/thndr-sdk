@@ -61,24 +61,6 @@ The `clinch-sdk.js` file is the main SDK script that facilitates secure communic
 ### Overview
 This SDK handles token authentication requests, redirections, and ensures messages are only processed from the trusted Clinch iFrame.
 
-### Key Functions
-
-1. **loadClinch**
-   ```javascript
-   import { loadClinch } from './clinch-operator-sdk.js';
-
-   loadClinch(CLINCH_ORIGIN, REDIRECT_URL, getTokenCallback);
-   ```
-   Initializes the SDK by setting up a message event listener to handle messages from the Clinch iframe.
-
-2. **getTokenCallback**
-   ```javascript
-   function getToken() {
-     return "AUTH_TOKEN";
-   }
-   ```
-   This callback function should return a valid token for authentication.
-
 ### Example Usage
 1. **Import and Initialize**: Include the SDK in your HTML file as shown in the `index.html` example.
 2. **Implement getToken**: Provide the logic to fetch the token (see our API documentation), which will be used by the SDK to authenticate with Clinch.
