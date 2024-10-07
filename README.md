@@ -48,42 +48,8 @@ The `index.html` file serves as a reference implementation for integrating the C
 ### Purpose of `index.html`
 This file sets up an iframe that points to the Clinch operator and includes a script to load the Clinch SDK.
 
-### Sample `index.html`
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Clinch</title>
-  </head>
-  <body>
-    <iframe src="https://embed.clinch.gg" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
-        Your browser doesn't support iframes
-    </iframe>
-    <script type="module">
-      import { loadClinch } from './clinch-sdk.js';
-
-      // Define the callback function to get the token
-      function getToken() {
-        return "AUTH_TOKEN"; // Replace with the auth token returned by your auth API. See our API documentation
-      }
-
-      const CLINCH_URL = "https://embed.clinch.gg";
-      const REDIRECT_URL = "https://yourwebsite.com"; // This is the url you wish to redirect back to. (optional)
-
-      loadClinch(CLINCH_URL, REDIRECT_URL, getToken);
-    </script>
-  </body>
-</html>
-```
 ### How to Use
-1. **Embed the iFrame**: The iFrame will load the Clinch web app.
-
-2. **Load the SDK**: The script tag imports and initializes the Clinch SDK with necessary parameters:
-   - `CLINCH_URL`: The origin URL of the Clinch iframe.
-   - `REDIRECT_URL`: The URL to redirect to if the user wants to 'go back' to your website. Optional, if undefined the button to return to your website will not be shown.
-   - `getToken()`: A callback function to retrieve the authentication token.
+Read the latest documentation on https://docs.thndr.io/thndr
 
 ### Integration
 To integrate this into your project, copy the content of `index.html` into your web application's HTML file where you want to include the Clinch iframe and SDK functionality.
