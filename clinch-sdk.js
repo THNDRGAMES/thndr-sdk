@@ -18,7 +18,18 @@ const MessageTypes = Object.freeze({
   GET_BALANCE: "operator_get_balance", // Request balance from the operator
   SET_BALANCE: "operator_set_balance", // Send the balance to the iframe
   PAY_INVOICE: "operator_pay_invoice", // Pay an invoice
+  CANCEL_INVOICE: "operator_cancel_invoice", // Cancel an invoice
 });
+
+/**
+ * Tells the Clinch iframe that this invoice is not going to be paid and to disregard.
+ */
+export function cancelInvoice(invoice, origin) {
+  postMessage({
+    message: MessageTypes.CANCEL_INVOICE,
+    invoice,
+  }, origin);
+}
 
 /**
  * Initializes the Clinch SDK by listening for postMessage events from the iframe and responding accordingly.
@@ -40,7 +51,7 @@ export async function loadClinch(
 
   postMessage({
     message: MessageTypes.SET_CONFIG,
-    config: config,
+    config,
   }, origin);
 
   /**
@@ -115,8 +126,8 @@ export async function loadClinch(
         logDebug("Sent token in response to GET_TOKEN");
         break;
       case MessageTypes.PAY_INVOICE:
-        onPayInvoice(messageData.invoice);
-        logDebug(`Invoice handled: ${JSON.stringify(messageData.invoice)}`);
+        onPayInvoice(messageData.data.invoice);
+        logDebug(`Invoice received: ${JSON.stringify(messageData.data.invoice)}`);
         break;
       case MessageTypes.GET_BALANCE:
         const balance = getBalance();
