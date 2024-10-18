@@ -39,13 +39,13 @@ export function cancelInvoice(invoice, origin) {
  * @param {Object} config - Configuration object for the Clinch SDK.
  * @param {Function} getToken - Callback to retrieve the authentication token.
  * @param {Function} getBalance - Callback to retrieve the user's balance.
- * @param {Function} onPayInvoice - Callback to process invoice payments.
+ * @param {Function} [onPayInvoice] - Optional callback to process invoice payments.
  */
 export async function loadClinch(
   config,
   getToken,
   getBalance,
-  onPayInvoice
+  onPayInvoice = null
 ) {
   const origin = config.clinchUrl;
 
@@ -126,8 +126,10 @@ export async function loadClinch(
         logDebug("Sent token in response to GET_TOKEN");
         break;
       case MessageTypes.PAY_INVOICE:
-        onPayInvoice(messageData.data.invoice);
-        logDebug(`Invoice received: ${JSON.stringify(messageData.data.invoice)}`);
+        if (onPayInvoice) {
+          onPayInvoice(messageData.data.invoice);
+          logDebug(`Invoice received: ${JSON.stringify(messageData.data.invoice)}`);
+        }
         break;
       case MessageTypes.GET_BALANCE:
         const balance = getBalance();

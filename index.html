@@ -13,39 +13,39 @@
       import { loadClinch, cancelInvoice } from './clinch-sdk.js';
     
       const config = {
-        operatorId: 'your_operator_id', // Get from THNDR
+        operatorId: 'speed',
         clinchUrl: "https://embed-sandbox.clinch.gg",
-        companyName: "You company name",
-        paymentType: "lightning",
-        showSats: true,
+        companyName: "Speed",
+        paymentType: "lightning",  // Lightning Iframe Only
+        showSats: true,  // Lightning Iframe Only
         logging: true,
-        lightningAddress: "jack@zbd.gg",
+        lightningAddress: "jack@zbd.gg", // Lightning Iframe Only
       };
     
-      function getToken() {
+      async function getToken() {
         console.log("Clinch SDK: Get the server to server thndr authentication token");
-        return "eyJhbGciOiJSUzI1Ni........";
+        return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTcyODU3NzY0MywiZXhwIjoxNzI4NTgxMjQzLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay11aHlsY0BjbGluY2gtc2FuZC5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInN1YiI6ImZpcmViYXNlLWFkbWluc2RrLXVoeWxjQGNsaW5jaC1zYW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwidWlkIjoiYjFlNzRiYzQtZWJhZi00NWQ4LTk3MzMtYTcyYzNiMjNlZThjIn0.PcBE2koTtBL--3rjiJ8DElqtKqVafv0F6ZjgfzCWebfXhsGg04Nc-hLfARsfk4EjPwxnoVRN9crwA2yhLopAXKu-80Q4GzYCJ7hBSb9z6BbNZ37n0saljO4QMgUlaA1rOnvXI0YDLhLZ5sVgTGUhKtzXwN3L-khpDxUPL1VzvkElitT1gI2p3B45y1gAlk6tHyt2yaXJChCxCmERnJXtFLdTsri5XIo6JVK9jKbpTXNR2AZqsEhJpamaQdVbVKvZEKFLRSGYlqSlahOpi-4QEImAfUQ7y4DKiSYb1_IUaU3_PU_XDUvJKuJ4SsKdYA3tPEG0szUaaasyyxOJizZfIQ";
       }
     
-      function getBalance() {
+      async function getBalance() {
         return {
           balance: 10000,
-          currency: "sats", // Must be either - sats, btc, or cents (USD)
+          currency: "sats", // your currency
         };
       }
     
-      function onPayInvoice(invoice) {
+      async function onPayInvoice(invoice) {
         console.log("Pay invoice", invoice);
       }
     
-      // Use this is you need to cancell the invoice and because you are not going to pay it.
+      // Use this is you need to cancel the invoice and because you are not going to pay it.
       //cancelInvoice(invoice, "https://embed-sandbox.clinch.gg");
 
       loadClinch(
         config,
         getToken,
         getBalance,
-        onPayInvoice
+        onPayInvoice // optional
       );
     </script>
   </body>
