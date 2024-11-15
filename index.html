@@ -6,7 +6,7 @@
     <title>Clinch</title>
   </head>
   <body>
-    <iframe src="https://embed-sandbox.clinch.gg" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
+    <iframe src="http://localhost:8101" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
         Your browser doesn't support iframes
     </iframe>
     <script type="module">
@@ -14,7 +14,7 @@
     
       const config = {
         operatorId: 'speed',
-        clinchUrl: "https://embed-sandbox.clinch.gg",
+        clinchUrl: "http://localhost:8101",
         companyName: "Speed",
         paymentType: "lightning",  // Lightning Iframe Only
         showSats: true,  // Lightning Iframe Only
@@ -22,19 +22,19 @@
         lightningAddress: "jack@zbd.gg", // Lightning Iframe Only
       };
     
-      async function getToken() {
+      function getToken() {
         console.log("Clinch SDK: Get the server to server thndr authentication token");
-        return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTcyODU3NzY0MywiZXhwIjoxNzI4NTgxMjQzLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay11aHlsY0BjbGluY2gtc2FuZC5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInN1YiI6ImZpcmViYXNlLWFkbWluc2RrLXVoeWxjQGNsaW5jaC1zYW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwidWlkIjoiYjFlNzRiYzQtZWJhZi00NWQ4LTk3MzMtYTcyYzNiMjNlZThjIn0.PcBE2koTtBL--3rjiJ8DElqtKqVafv0F6ZjgfzCWebfXhsGg04Nc-hLfARsfk4EjPwxnoVRN9crwA2yhLopAXKu-80Q4GzYCJ7hBSb9z6BbNZ37n0saljO4QMgUlaA1rOnvXI0YDLhLZ5sVgTGUhKtzXwN3L-khpDxUPL1VzvkElitT1gI2p3B45y1gAlk6tHyt2yaXJChCxCmERnJXtFLdTsri5XIo6JVK9jKbpTXNR2AZqsEhJpamaQdVbVKvZEKFLRSGYlqSlahOpi-4QEImAfUQ7y4DKiSYb1_IUaU3_PU_XDUvJKuJ4SsKdYA3tPEG0szUaaasyyxOJizZfIQ";
+        return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTczMTYzMDk3NSwiZXhwIjoxNzMxNjM0NTc1LCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay11aHlsY0BjbGluY2gtc2FuZC5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInN1YiI6ImZpcmViYXNlLWFkbWluc2RrLXVoeWxjQGNsaW5jaC1zYW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwidWlkIjoiOWRlMDYzNzgtNTQ2MS00ZWRhLWE2MjYtZGNmZTc2M2IwMjU3In0.D1ZFA5f8fuI7CordRWksuYPKoreWqluRLxFMZPEQgC7XLwpIMakyTVhK_JulnLVUHh5a4Qv_IxUPL8oPgLUUTUiHE0UgQNjV9YAoqtbjA_0w37c28i30ZMx6DFE8uhfgQ04_cExYEvI1m95IE5J4oQQ3zLabWhcki1_kObBfS5GaO0XRecUd9h_W9UNoAAyhYe3jNB8tKiOclP1yyxEruHUcErnF2aSBLyJAhM8pBvOPyDWk-OJ_6J7FC5yxYrGqiBvgYHeC3wYnU5aF5QZQXV7SzhIYfV6c9Hf9TTYzazfrVEmWN3H7Iwyrmv1v9bg4_aoLt5uQGDj1wLYpv4n3-A";
       }
     
-      async function getBalance() {
+      function getBalance() {
         return {
           balance: 10000,
-          currency: "sats", // your currency
+          currency: "cents", // your currency
         };
       }
     
-      async function onPayInvoice(invoice) {
+      function onPayInvoice(invoice) {
         console.log("Pay invoice", invoice);
       }
     
