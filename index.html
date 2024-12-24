@@ -13,9 +13,11 @@
       import { loadClinch, cancelInvoice } from './clinch-sdk.js';
     
       const config = {
-        operatorId: 'operator_id',
+        operatorId: "operator_id",
+        gameId: "solitaire", // "solitaire" or "blocks"
         clinchUrl: "https://embed-sandbox.clinch.gg",
-        companyName: "Company Nane",
+        companyName: "Company Name",
+        language: "en", // "en" or "ru"
         logging: true,
         paymentType: "lightning",  // Lightning Iframe Only
         showSats: true,  // Lightning Iframe Only
