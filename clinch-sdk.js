@@ -19,6 +19,8 @@ const MessageTypes = Object.freeze({
   SET_BALANCE: "operator_set_balance", // Send the balance to the iframe
   PAY_INVOICE: "operator_pay_invoice", // Pay an invoice
   CANCEL_INVOICE: "operator_cancel_invoice", // Cancel an invoice
+  REDIRECT: "operator_redirect", // Redirect the user to a new page
+  CLOSE: "operator_close", // Close the iframe
 });
 
 /**
@@ -45,6 +47,7 @@ export async function loadClinch(
   config,
   getToken,
   getBalance,
+  closeIframe,
   onPayInvoice = null
 ) {
   const origin = config.clinchUrl;
@@ -90,7 +93,7 @@ export async function loadClinch(
 
     // Handle the message based on its type
     try {
-      await handleMessage(messageData.message, messageData, origin, getToken, getBalance, onPayInvoice);
+      await handleMessage(messageData.message, messageData, origin, getToken, getBalance, closeIframe, onPayInvoice);
     } catch (e) {
       console.error("Clinch SDK: Error handling message", e);
     }
@@ -108,7 +111,7 @@ export async function loadClinch(
    * @param {Function} getBalance - Callback to retrieve the user's balance.
    * @param {Function} onPayInvoice - Callback to process invoice payments.
    */
-  async function handleMessage(message, messageData, origin, getToken, getBalance, onPayInvoice) {
+  async function handleMessage(message, messageData, origin, getToken, getBalance, closeIframe, onPayInvoice) {
     logDebug(`Handling message: ${message}`);
     switch (message) {
       case MessageTypes.GET_CONFIG:
@@ -139,6 +142,10 @@ export async function loadClinch(
           currency: balance.currency,
         }, origin);
         logDebug("Sent balance in response to GET_BALANCE");
+        break;
+      case MessageTypes.REDIRECT:
+      case MessageTypes.CLOSE:
+        closeIframe();
         break;
       default:
         logDebug(`Unknown message type received: ${message}`);
