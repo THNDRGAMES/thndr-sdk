@@ -17,10 +17,9 @@
         gameId: "solitaire", // "solitaire" or "blocks"
         clinchUrl: "https://embed-sandbox.clinch.gg",
         companyName: "Company Name",
-        language: "en", // "en" or "ru"
+        language: "en",
         logging: true,
         paymentType: "lightning",  // Lightning Iframe Only
-        showSats: true,  // Lightning Iframe Only
         lightningAddress: "jack@zbd.gg", // Lightning Iframe Only
       };
     
@@ -36,6 +35,10 @@
         };
       }
     
+      function closeIframe() {
+        console.log("Clinch SDK: Close the iFrame");
+      }
+
       // Lightning iFrame Only
       function onPayInvoice(invoice) {
         console.log("Pay invoice", invoice);
@@ -45,6 +48,7 @@
         config,
         getToken,
         getBalance,
+        closeIframe,
         onPayInvoice // optional Lightning iFrame Only
       );
     </script>
