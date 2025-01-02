@@ -6,7 +6,10 @@
     <title>Clinch</title>
   </head>
   <body>
-    <iframe src="https://embed-sandbox.clinch.gg" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
+    <iframe 
+      src="https://embed-sandbox.clinch.gg"
+      id="clinchiframe"
+      style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
         Your browser doesn't support iframes
     </iframe>
     <script type="module">
@@ -15,6 +18,7 @@
       const config = {
         operatorId: "operator_id",
         gameId: "solitaire", // "solitaire" or "blocks"
+        iframeId: "clinchiframe",
         clinchUrl: "https://embed-sandbox.clinch.gg",
         companyName: "Company Name",
         language: "en",
