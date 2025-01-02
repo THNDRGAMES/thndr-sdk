@@ -51,11 +51,12 @@ export async function loadClinch(
   onPayInvoice = null
 ) {
   const origin = config.clinchUrl;
+  const iframeId = config.iframeId ? `#${config.iframeId}` : 'frame';
 
   postMessage({
     message: MessageTypes.SET_CONFIG,
     config,
-  }, origin);
+  }, origin, iframeId);
 
   /**
    * Logs debug messages to the console when debug mode is enabled.
@@ -64,7 +65,7 @@ export async function loadClinch(
    */
   function logDebug(message) {
     if (config.logging) {
-      console.debug(`Clinch SDK: ${message}`);
+      console.log(`Clinch SDK: ${message}`);
     }
   }
 
@@ -73,19 +74,18 @@ export async function loadClinch(
    * Handles messages based on their type (e.g., token requests, balance requests, etc.).
    */
   window.addEventListener("message", async function (event) {
-    logDebug(`Received message from origin ${event.origin}`);
-    
     // Validate the origin of the message
     if (!isMessageFromClinch(event, origin)) {
-      logDebug("Message ignored: not from Clinch.");
       return;
     }
 
+    logDebug(`Received message from origin ${event.origin}`);
+    
     // Parse the incoming message
     let messageData;
     try {
       messageData = JSON.parse(event.data);
-      logDebug(`Parsed message: ${JSON.stringify(messageData)}`);
+      logDebug(`Message: ${JSON.stringify(messageData.message)}`);
     } catch (e) {
       console.error("Clinch SDK: Failed to parse message data", e);
       return;
@@ -93,7 +93,7 @@ export async function loadClinch(
 
     // Handle the message based on its type
     try {
-      await handleMessage(messageData.message, messageData, origin, getToken, getBalance, closeIframe, onPayInvoice);
+      await handleMessage(messageData.message, messageData, origin, iframeId, getToken, getBalance, closeIframe, onPayInvoice);
     } catch (e) {
       console.error("Clinch SDK: Error handling message", e);
     }
@@ -107,41 +107,42 @@ export async function loadClinch(
    * @param {string} message - The message type (e.g., GET_TOKEN).
    * @param {Object} messageData - The full message object received from the iframe.
    * @param {string} origin - The origin of the message (for validation).
+   * @param {string} iframeId - The iframe id
    * @param {Function} getToken - Callback to retrieve the authentication token.
    * @param {Function} getBalance - Callback to retrieve the user's balance.
    * @param {Function} onPayInvoice - Callback to process invoice payments.
    */
-  async function handleMessage(message, messageData, origin, getToken, getBalance, closeIframe, onPayInvoice) {
+  async function handleMessage(message, messageData, origin, iframeId, getToken, getBalance, closeIframe, onPayInvoice) {
     logDebug(`Handling message: ${message}`);
     switch (message) {
       case MessageTypes.GET_CONFIG:
+        logDebug("Sent config in response to SET_CONFIG");
         postMessage({
           message: MessageTypes.SET_CONFIG,
           config: config,
-        }, origin);
-        logDebug("Sent config in response to SET_CONFIG");
+        }, origin, iframeId);
         break;
       case MessageTypes.GET_TOKEN:
+        logDebug("Sent token in response to GET_TOKEN");
         postMessage({
           message: MessageTypes.SET_TOKEN,
           token: getToken(),
-        }, origin);
-        logDebug("Sent token in response to GET_TOKEN");
+        }, origin, iframeId);
         break;
       case MessageTypes.PAY_INVOICE:
         if (onPayInvoice) {
-          onPayInvoice(messageData.data.invoice);
           logDebug(`Invoice received: ${JSON.stringify(messageData.data.invoice)}`);
+          onPayInvoice(messageData.data.invoice);
         }
         break;
       case MessageTypes.GET_BALANCE:
+        logDebug("Sent balance in response to GET_BALANCE");
         const balance = getBalance();
         postMessage({
           message: MessageTypes.SET_BALANCE,
           balance: balance.balance,
           currency: balance.currency,
-        }, origin);
-        logDebug("Sent balance in response to GET_BALANCE");
+        }, origin, iframeId);
         break;
       case MessageTypes.REDIRECT:
       case MessageTypes.CLOSE:
@@ -180,9 +181,9 @@ function isMessageFromClinch(event, origin) {
  * @param {Object} messageObject - The message object to send to the iframe.
  * @param {string} origin - The origin of the iframe (for security validation).
  */
-function postMessage(messageObject, origin) {
+function postMessage(messageObject, origin, iframeId) {
   const messageJSON = JSON.stringify(messageObject);
-  const iframe = document.querySelector("iframe");
+  const iframe = document.querySelector(iframeId);
   if (iframe && iframe.contentWindow) {
     iframe.contentWindow.postMessage(messageJSON, origin);
   } else {
