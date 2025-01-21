@@ -53,6 +53,8 @@ export async function loadClinch(
   const origin = config.clinchUrl;
   const iframeId = config.iframeId ? `#${config.iframeId}` : 'frame';
 
+  await waitForElm(iframeId);
+
   postMessage({
     message: MessageTypes.SET_CONFIG,
     config,
@@ -189,4 +191,25 @@ function postMessage(messageObject, origin, iframeId) {
   } else {
     console.error("Clinch SDK: Unable to find the iframe");
   }
+}
+
+
+function waitForElm(selector) {
+  return new Promise(resolve => {
+      if (document.querySelector(selector)) {
+          return resolve(document.querySelector(selector));
+      }
+
+      const observer = new MutationObserver(mutations => {
+          if (document.querySelector(selector)) {
+              observer.disconnect();
+              resolve(document.querySelector(selector));
+          }
+      });
+
+      observer.observe(document.body, {
+          childList: true,
+          subtree: true
+      });
+  });
 }
