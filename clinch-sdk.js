@@ -128,7 +128,7 @@ export async function loadClinch(
         logDebug("Sent token in response to GET_TOKEN");
         postMessage({
           message: MessageTypes.SET_TOKEN,
-          token: getToken(),
+          token: await Promise.resolve(getToken()),
         }, origin, iframeId);
         break;
       case MessageTypes.PAY_INVOICE:
@@ -139,7 +139,7 @@ export async function loadClinch(
         break;
       case MessageTypes.GET_BALANCE:
         logDebug("Sent balance in response to GET_BALANCE");
-        const balance = getBalance();
+        const balance = await Promise.resolve(getBalance());
         postMessage({
           message: MessageTypes.SET_BALANCE,
           balance: balance.balance,
