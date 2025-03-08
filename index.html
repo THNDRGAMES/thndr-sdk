@@ -3,40 +3,44 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Clinch</title>
+    <title>Game</title>
   </head>
   <body>
     <iframe 
-      src="http://localhost:8100"
-      id="clinchiframe"
+      src="https://demo-24748543997.us-central1.run.app"
+      id="games_iframe"
       style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
         Your browser doesn't support iframes
     </iframe>
     <script type="module">
       import { demoBalance, loadClinch, cancelInvoice } from './clinch-sdk.js';
     
+      // Demo URL https://demo-24748543997.us-central1.run.app
+      // Sandbox URL https://embed-sandbox.clinch.gg     
+      // Production URL https://embed.clinch.gg
+      
       const config = {
         operatorId: "demo",
-        gameId: "solitaire", // "solitaire" or "blocks"
-        iframeId: "clinchiframe",
-        clinchUrl: "http://localhost:8100",
+        gameId: "solitaire", // "blackjack" "solitaire" or "blocks"
+        iframeId: "games_iframe",
+        clinchUrl: "https://demo-24748543997.us-central1.run.app",
         language: "en",
         logging: false,
       };
     
       function getToken() {
-        return "demo";
+        return "demo"; // Replace with your token
       }
     
       function getBalance() {
         return {
-          balance: demoBalance,
+          balance: demoBalance, // Replace with your balance
           currency: "cents",
         };
       }
     
       function closeIframe() {
-        console.log("Clinch SDK: Close the iFrame");
+        console.log("Close the iFrame");
       }
 
       loadClinch(
