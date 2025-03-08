@@ -17,11 +17,14 @@ const MessageTypes = Object.freeze({
   SET_TOKEN: "operator_set_token", // Send token to the iframe
   GET_BALANCE: "operator_get_balance", // Request balance from the operator
   SET_BALANCE: "operator_set_balance", // Send the balance to the iframe
+  DEMO_BALANCE_UPDATE: "operator_demo_balance_update", // Update the balance for demo purposes
   PAY_INVOICE: "operator_pay_invoice", // Pay an invoice
   CANCEL_INVOICE: "operator_cancel_invoice", // Cancel an invoice
   REDIRECT: "operator_redirect", // Redirect the user to a new page
   CLOSE: "operator_close", // Close the iframe
 });
+
+export var demoBalance = 20000; // 100.00 USD
 
 /**
  * Tells the Clinch iframe that this invoice is not going to be paid and to disregard.
@@ -149,6 +152,9 @@ export async function loadClinch(
       case MessageTypes.REDIRECT:
       case MessageTypes.CLOSE:
         closeIframe();
+        break;
+      case MessageTypes.DEMO_BALANCE_UPDATE:
+        demoBalance += messageData.data.balanceInc;
         break;
       default:
         logDebug(`Unknown message type received: ${message}`);
