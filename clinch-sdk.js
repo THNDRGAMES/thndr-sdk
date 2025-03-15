@@ -189,7 +189,7 @@ function isMessageFromClinch(event, origin) {
  * @param {Object} messageObject - The message object to send to the iframe.
  * @param {string} origin - The origin of the iframe (for security validation).
  */
-function postMessage(messageObject, origin, iframeId) {
+export function postMessage(messageObject, origin, iframeId) {
   const messageJSON = JSON.stringify(messageObject);
   const iframe = document.querySelector(iframeId);
   if (iframe && iframe.contentWindow) {

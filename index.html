@@ -15,13 +15,16 @@
     <script type="module">
       import { demoBalance, loadClinch, cancelInvoice } from './clinch-sdk.js';
     
+      // Using the "demo" operatorId will allow you to test the integration with the demo 
+      // environment and now s2s required.
+      //
       // Demo URL https://demo-24748543997.us-central1.run.app
       // Sandbox URL https://embed-sandbox.clinch.gg     
       // Production URL https://embed.clinch.gg
       
       const config = {
         operatorId: "demo",
-        gameId: "solitaire", // "blackjack" "solitaire" or "blocks"
+        gameId: "blocks", // "blackjack" "solitaire" or "blocks"
         iframeId: "games_iframe",
         clinchUrl: "https://demo-24748543997.us-central1.run.app",
         language: "en",
