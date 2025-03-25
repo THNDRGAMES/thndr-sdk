@@ -24,7 +24,7 @@
       
       const config = {
         operatorId: "demo",
-        gameId: "blocks", // "blackjack" "solitaire" or "blocks"
+        gameId: "solitaire", // "blackjack" "solitaire" or "blocks"
         iframeId: "games_iframe",
         clinchUrl: "https://demo-24748543997.us-central1.run.app",
         language: "en",
@@ -46,11 +46,17 @@
         console.log("Close the iFrame");
       }
 
+      function handleError(error) {
+        console.log("Error code", error.code);
+        return false;
+      }
+
       loadClinch(
         config,
         getToken,
         getBalance,
-        closeIframe
+        closeIframe,
+        handleError,
       );
     </script>
   </body>

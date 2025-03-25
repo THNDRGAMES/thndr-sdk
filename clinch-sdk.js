@@ -22,6 +22,8 @@ const MessageTypes = Object.freeze({
   CANCEL_INVOICE: "operator_cancel_invoice", // Cancel an invoice
   REDIRECT: "operator_redirect", // Redirect the user to a new page
   CLOSE: "operator_close", // Close the iframe
+  HANDLE_ERROR: "operator_handle_error", // Handle errors
+  ERROR_HANDLED: "operator_error_handled", // Error handled
 });
 
 export var demoBalance = 20000; // 100.00 USD
@@ -44,6 +46,8 @@ export function cancelInvoice(invoice, origin) {
  * @param {Object} config - Configuration object for the Clinch SDK.
  * @param {Function} getToken - Callback to retrieve the authentication token.
  * @param {Function} getBalance - Callback to retrieve the user's balance.
+ * @param {Function} closeIframe - Callback to close the iframe.
+ * @param {Function} handleError - Callback to handle an error.
  * @param {Function} [onPayInvoice] - Optional callback to process invoice payments.
  */
 export async function loadClinch(
@@ -51,6 +55,7 @@ export async function loadClinch(
   getToken,
   getBalance,
   closeIframe,
+  handleError,
   onPayInvoice = null
 ) {
   const origin = config.clinchUrl;
@@ -155,6 +160,13 @@ export async function loadClinch(
         break;
       case MessageTypes.DEMO_BALANCE_UPDATE:
         demoBalance += messageData.data.balanceInc;
+        break;
+      case MessageTypes.HANDLE_ERROR:
+        logDebug("Error received from iframe HANDLE_ERROR");
+        postMessage({
+          message: MessageTypes.ERROR_HANDLED,
+          handled: await Promise.resolve(handleError(messageData.data.error)),
+        }, origin, iframeId);
         break;
       default:
         logDebug(`Unknown message type received: ${message}`);
