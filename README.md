@@ -16,7 +16,10 @@ To serve your project locally, you will use the `http-server` package.
    npm install -g http-server
    ```
 
-3. **Navigate to Your Project Directory**: Change your terminal's current directory to your project's root directory where your `index.html` file is located.
+3. **Navigate to Your Project Directory**: Change your terminal's current directory to your project's root directory (where the `clinch-sdk.js` file is located):
+   ```sh
+   cd /path/to/operator-sdk
+   ```
 
 4. **Run the HTTP Server**: Start the server with the following command:
    ```sh
@@ -25,6 +28,11 @@ To serve your project locally, you will use the `http-server` package.
    - `-p 8005`: Specifies the port number to use.
    - `-c-1`: Disables caching.
    - `--cors`: Enables Cross-Origin Resource Sharing (CORS).
+
+5. **Access the Example**: Open your web browser and navigate to:
+   ```
+   http://localhost:8005/examples/html/index.html
+   ```
 
 ### Purpose of the JSON File for the Build Server
 The `http-server.json` file configures the HTTP server. Here's a sample configuration from your project:
