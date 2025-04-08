@@ -1,7 +1,7 @@
-# Clinch SDK
+# THNDR SDK
 
 ## Overview
-This project provides a reference implementation for integrating the Clinch SDK to show the web app in an iFrame. It includes a simple HTTP server setup, a reference HTML file (`index.html`), and the SDK JavaScript file (`clinch-sdk.js`). Follow the instructions below to get started.
+This project provides a reference implementation for integrating the THNDR SDK to show the web app in an iFrame. It includes a simple HTTP server setup, a reference HTML file (`index.html`), and the SDK JavaScript file (`thndr-sdk.js`). Follow the instructions below to get started.
 
 ## Installation and Running the HTTP Server
 
@@ -16,7 +16,7 @@ To serve your project locally, you will use the `http-server` package.
    npm install -g http-server
    ```
 
-3. **Navigate to Your Project Directory**: Change your terminal's current directory to your project's root directory (where the `clinch-sdk.js` file is located):
+3. **Navigate to Your Project Directory**: Change your terminal's current directory to your project's root directory (where the `thndr-sdk.js` file is located):
    ```sh
    cd /path/to/operator-sdk
    ```
@@ -51,27 +51,27 @@ This configuration ensures that the server does not cache any content, which is 
 
 ## Example implementation `index.html`
 
-The `index.html` file serves as a reference implementation for integrating the Clinch SDK and web app. Here's a quick overview of its structure and how you can use it:
+The `index.html` file serves as a reference implementation for integrating the THNDR SDK and web app. Here's a quick overview of its structure and how you can use it:
 
 ### Purpose of `index.html`
-This file sets up an iframe that points to the Clinch operator and includes a script to load the Clinch SDK.
+This file sets up an iframe and includes a script to load the THNDR SDK.
 
 ### How to Use
 Read the latest documentation on https://docs.thndr.io/thndr
 
 ### Integration
-To integrate this into your project, copy the content of `index.html` into your web application's HTML file where you want to include the Clinch iframe and SDK functionality.
+To integrate this into your project, copy the content of `index.html` into your web application's HTML file where you want to include the THNDR iframe.
 
-## Using `clinch-sdk.js`
+## Using `thndr-sdk.js`
 
-The `clinch-sdk.js` file is the main SDK script that facilitates secure communication between your web application and the iFrame.
+The `thndr-sdk.js` file is the main SDK script that facilitates secure communication between your web application and the iFrame.
 
 ### Overview
-This SDK handles token authentication requests, redirections, and ensures messages are only processed from the trusted Clinch iFrame.
+This SDK handles token authentication requests, redirections, and ensures messages are only processed from the trusted THNDR Iframe.
 
 ### Example Usage
 1. **Import and Initialize**: Include the SDK in your HTML file as shown in the `index.html` example.
-2. **Implement getToken**: Provide the logic to fetch the token (see our API documentation), which will be used by the SDK to authenticate with Clinch.
+2. **Implement getToken**: Provide the logic to fetch the token (see our API documentation), which will be used by the SDK to authenticate with THNDR.
 
 ## FAQ
 

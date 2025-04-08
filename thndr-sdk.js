@@ -1,18 +1,18 @@
 /**
- * Clinch Operator SDK
+ * THNDR Operator SDK
  *
- * This SDK facilitates secure messaging between the operator's website and a Clinch iframe. 
+ * This SDK facilitates secure messaging between the operator's website and a THNDR iframe. 
  * It handles token authentication, balance checks, and invoice payments via postMessage communication.
  * The SDK also includes a debug mode for logging key events during the integration process.
  */
 
 /**
  * @constant {Object} MessageTypes
- * Defines the different types of messages that can be sent between the operator and the Clinch iframe.
+ * Defines the different types of messages that can be sent between the operator and the THNDR iframe.
  */
 const MessageTypes = Object.freeze({
   GET_CONFIG: "operator_get_config", // Request the configuration from the operator
-  SET_CONFIG: "operator_set_config", // Set the configuration for the Clinch SDK
+  SET_CONFIG: "operator_set_config", // Set the configuration for the THNDR SDK
   GET_TOKEN: "operator_get_token", // Request token from the operator
   SET_TOKEN: "operator_set_token", // Send token to the iframe
   GET_BALANCE: "operator_get_balance", // Request balance from the operator
@@ -29,7 +29,7 @@ const MessageTypes = Object.freeze({
 export var demoBalance = 20000; // 100.00 USD
 
 /**
- * Tells the Clinch iframe that this invoice is not going to be paid and to disregard.
+ * Tells the THNDR iframe that this invoice is not going to be paid and to disregard.
  */
 export function cancelInvoice(invoice, origin) {
   postMessage({
@@ -39,18 +39,18 @@ export function cancelInvoice(invoice, origin) {
 }
 
 /**
- * Initializes the Clinch SDK by listening for postMessage events from the iframe and responding accordingly.
+ * Initializes the THNDR SDK by listening for postMessage events from the iframe and responding accordingly.
  *
  * @async
- * @function loadClinch
- * @param {Object} config - Configuration object for the Clinch SDK.
+ * @function initGame
+ * @param {Object} config - Configuration object for the THNDR SDK.
  * @param {Function} getToken - Callback to retrieve the authentication token.
  * @param {Function} getBalance - Callback to retrieve the user's balance.
  * @param {Function} closeIframe - Callback to close the iframe.
  * @param {Function} handleError - Callback to handle an error.
  * @param {Function} [onPayInvoice] - Optional callback to process invoice payments.
  */
-export async function loadClinch(
+export async function initGame(
   config,
   getToken,
   getBalance,
@@ -58,7 +58,7 @@ export async function loadClinch(
   handleError,
   onPayInvoice = null
 ) {
-  const origin = config.clinchUrl;
+  const origin = config.THNDRUrl;
   const iframeId = config.iframeId ? `#${config.iframeId}` : 'frame';
 
   await waitForElm(iframeId);
@@ -75,17 +75,17 @@ export async function loadClinch(
    */
   function logDebug(message) {
     if (config.logging) {
-      console.log(`Clinch SDK: ${message}`);
+      console.log(`THNDR SDK: ${message}`);
     }
   }
 
   /**
-   * Event listener for incoming postMessage events from the Clinch iframe.
+   * Event listener for incoming postMessage events from the THNDR iframe.
    * Handles messages based on their type (e.g., token requests, balance requests, etc.).
    */
   window.addEventListener("message", async function (event) {
     // Validate the origin of the message
-    if (!isMessageFromClinch(event, origin)) {
+    if (!isMessageFromTHNDR(event, origin)) {
       return;
     }
 
@@ -97,7 +97,7 @@ export async function loadClinch(
       messageData = JSON.parse(event.data);
       logDebug(`Message: ${JSON.stringify(messageData.message)}`);
     } catch (e) {
-      console.error("Clinch SDK: Failed to parse message data", e);
+      console.error("THNDR SDK: Failed to parse message data", e);
       return;
     }
 
@@ -105,7 +105,7 @@ export async function loadClinch(
     try {
       await handleMessage(messageData.message, messageData, origin, iframeId, getToken, getBalance, closeIframe, onPayInvoice);
     } catch (e) {
-      console.error("Clinch SDK: Error handling message", e);
+      console.error("THNDR SDK: Error handling message", e);
     }
   });
 
@@ -175,14 +175,14 @@ export async function loadClinch(
 }
 
 /**
- * Validates if a message originates from the expected Clinch iframe.
+ * Validates if a message originates from the expected THNDR iframe.
  *
- * @function isMessageFromClinch
+ * @function isMessageFromTHNDR
  * @param {Object} event - The postMessage event received from the iframe.
  * @param {string} origin - The expected origin of the iframe (for security validation).
  * @returns {boolean} - Returns true if the message is valid, false otherwise.
  */
-function isMessageFromClinch(event, origin) {
+function isMessageFromTHNDR(event, origin) {
   if (event.origin !== origin) {
     return false;
   }
@@ -195,7 +195,7 @@ function isMessageFromClinch(event, origin) {
 }
 
 /**
- * Sends a message to the Clinch iframe via postMessage.
+ * Sends a message to the THNDR iframe via postMessage.
  *
  * @function postMessage
  * @param {Object} messageObject - The message object to send to the iframe.
@@ -207,7 +207,7 @@ export function postMessage(messageObject, origin, iframeId) {
   if (iframe && iframe.contentWindow) {
     iframe.contentWindow.postMessage(messageJSON, origin);
   } else {
-    console.error("Clinch SDK: Unable to find the iframe");
+    console.error("THNDR SDK: Unable to find the iframe");
   }
 }
 

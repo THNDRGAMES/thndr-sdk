@@ -13,7 +13,7 @@
         Your browser doesn't support iframes
     </iframe>
     <script type="module">
-      import { demoBalance, loadClinch, cancelInvoice } from '/clinch-sdk.js';
+      import { demoBalance, initGame, cancelInvoice } from '/thndr-sdk.js';
     
       // Using the "demo" operatorId will allow you to test the integration with the demo 
       // environment and now s2s required.
@@ -26,7 +26,7 @@
         operatorId: "demo",
         gameId: "solitaire", // "blackjack" "solitaire" or "blocks"
         iframeId: "games_iframe",
-        clinchUrl: "https://demo-24748543997.us-central1.run.app",
+        THNDRUrl: "https://demo-24748543997.us-central1.run.app",
         language: "en",
         logging: false,
       };
@@ -51,7 +51,7 @@
         return false;
       }
 
-      loadClinch(
+      loadTHNDR(
         config,
         getToken,
         getBalance,
