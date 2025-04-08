@@ -26,7 +26,8 @@ const MessageTypes = Object.freeze({
   ERROR_HANDLED: "operator_error_handled", // Error handled
 });
 
-export var demoBalance = 20000; // 100.00 USD
+export var demoBalance = 20000; // 200.00 USD
+export var loggingEnabled = false; // Enable logging for debugging
 
 /**
  * Tells the THNDR iframe that this invoice is not going to be paid and to disregard.
@@ -36,6 +37,10 @@ export function cancelInvoice(invoice, origin) {
     message: MessageTypes.CANCEL_INVOICE,
     invoice,
   }, origin);
+}
+
+export function enableLogging() {
+  loggingEnabled = true;
 }
 
 /**
@@ -74,7 +79,7 @@ export async function initGame(
    * @param {string} message - The debug message to be logged.
    */
   function logDebug(message) {
-    if (config.logging) {
+    if (loggingEnabled) {
       console.log(`THNDR SDK: ${message}`);
     }
   }

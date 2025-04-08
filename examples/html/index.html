@@ -13,7 +13,7 @@
         Your browser doesn't support iframes
     </iframe>
     <script type="module">
-      import { demoBalance, initGame, cancelInvoice } from '/thndr-sdk.js';
+      import { enableLogging, demoBalance, initGame, cancelInvoice } from '/thndr-sdk.js';
     
       // Using the "demo" operatorId will allow you to test the integration with the demo 
       // environment and now s2s required.
@@ -28,7 +28,6 @@
         iframeId: "games_iframe",
         THNDRUrl: "https://demo-24748543997.us-central1.run.app",
         language: "en",
-        logging: false,
       };
     
       function getToken() {
@@ -51,7 +50,9 @@
         return false;
       }
 
-      loadTHNDR(
+      // enableLogging(); // Optional, enable logging for debugging
+
+      initGame(
         config,
         getToken,
         getBalance,
