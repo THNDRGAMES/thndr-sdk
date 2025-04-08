@@ -11,6 +11,7 @@
  * Defines the different types of messages that can be sent between the operator and the THNDR iframe.
  */
 const MessageTypes = Object.freeze({
+  SET_SDK_VERSION: "operator_set_sdk_version", // Set the version of the SDK
   GET_CONFIG: "operator_get_config", // Request the configuration from the operator
   SET_CONFIG: "operator_set_config", // Set the configuration for the THNDR SDK
   GET_TOKEN: "operator_get_token", // Request token from the operator
@@ -26,6 +27,7 @@ const MessageTypes = Object.freeze({
   ERROR_HANDLED: "operator_error_handled", // Error handled
 });
 
+const SDK_VERSION = "2.0.0";
 export var demoBalance = 20000; // 200.00 USD
 export var loggingEnabled = false; // Enable logging for debugging
 
@@ -69,6 +71,11 @@ export async function initGame(
   await waitForElm(iframeId);
 
   postMessage({
+    message: MessageTypes.SET_SDK_VERSION,
+    version: SDK_VERSION,
+  }, origin, iframeId);
+
+  postMessage({
     message: MessageTypes.SET_CONFIG,
     config,
   }, origin, iframeId);
@@ -80,7 +87,7 @@ export async function initGame(
    */
   function logDebug(message) {
     if (loggingEnabled) {
-      console.log(`THNDR SDK: ${message}`);
+      console.log(`THNDR SDK (v${SDK_VERSION}): ${message}`);
     }
   }
 
