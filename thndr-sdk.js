@@ -11,6 +11,7 @@
  * Defines the different types of messages that can be sent between the operator and the THNDR iframe.
  */
 const MessageTypes = Object.freeze({
+  GET_SDK_VERSION: "operator_get_sdk_version", // Get the version of the SDK
   SET_SDK_VERSION: "operator_set_sdk_version", // Set the version of the SDK
   GET_CONFIG: "operator_get_config", // Request the configuration from the operator
   SET_CONFIG: "operator_set_config", // Set the configuration for the THNDR SDK
@@ -27,7 +28,7 @@ const MessageTypes = Object.freeze({
   ERROR_HANDLED: "operator_error_handled", // Error handled
 });
 
-const SDK_VERSION = "2.0.0";
+var SDK_VERSION = "2.0.0";
 export var demoBalance = 20000; // 200.00 USD
 export var loggingEnabled = false; // Enable logging for debugging
 
@@ -69,11 +70,6 @@ export async function initGame(
   const iframeId = config.iframeId ? `#${config.iframeId}` : 'frame';
 
   await waitForElm(iframeId);
-
-  postMessage({
-    message: MessageTypes.SET_SDK_VERSION,
-    version: SDK_VERSION,
-  }, origin, iframeId);
 
   postMessage({
     message: MessageTypes.SET_CONFIG,
@@ -137,6 +133,13 @@ export async function initGame(
   async function handleMessage(message, messageData, origin, iframeId, getToken, getBalance, closeIframe, onPayInvoice) {
     logDebug(`Handling message: ${message}`);
     switch (message) {
+      case MessageTypes.GET_SDK_VERSION:
+        logDebug("Sent SDK version in response to GET_SDK_VERSION");
+        postMessage({
+          message: MessageTypes.SET_SDK_VERSION,
+          version: SDK_VERSION,
+        }, origin, iframeId);
+        break;
       case MessageTypes.GET_CONFIG:
         logDebug("Sent config in response to SET_CONFIG");
         postMessage({
