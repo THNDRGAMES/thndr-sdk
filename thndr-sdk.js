@@ -13,8 +13,6 @@
 const MessageTypes = Object.freeze({
   GET_SDK_VERSION: "operator_get_sdk_version", // Get the version of the SDK
   SET_SDK_VERSION: "operator_set_sdk_version", // Set the version of the SDK
-  GET_CONFIG: "operator_get_config", // Request the configuration from the operator
-  SET_CONFIG: "operator_set_config", // Set the configuration for the THNDR SDK
   GET_TOKEN: "operator_get_token", // Request token from the operator
   SET_TOKEN: "operator_set_token", // Send token to the iframe
   GET_BALANCE: "operator_get_balance", // Request balance from the operator
@@ -51,7 +49,8 @@ export function enableLogging() {
  *
  * @async
  * @function initGame
- * @param {Object} config - Configuration object for the THNDR SDK.
+ * @param {string} iframeId - The id of the iframe.
+ * @param {string} iframeUrl - The url of the iframe.
  * @param {Function} getToken - Callback to retrieve the authentication token.
  * @param {Function} getBalance - Callback to retrieve the user's balance.
  * @param {Function} closeIframe - Callback to close the iframe.
@@ -59,17 +58,18 @@ export function enableLogging() {
  * @param {Function} [onPayInvoice] - Optional callback to process invoice payments.
  */
 export async function initGame(
-  config,
+  iframeId,
+  iframeUrl,
   getToken,
   getBalance,
   closeIframe,
   handleError,
   onPayInvoice = null
 ) {
-  const origin = config.THNDRUrl;
-  const iframeId = config.iframeId ? `#${config.iframeId}` : 'frame';
+  const origin = iframeUrl;
+  const elementId = iframeId ? `#${iframeId}` : 'frame';
 
-  await waitForElm(iframeId);
+  await waitForElm(elementId);
 
   /**
    * Logs debug messages to the console when debug mode is enabled.
@@ -106,7 +106,7 @@ export async function initGame(
 
     // Handle the message based on its type
     try {
-      await handleMessage(messageData.message, messageData, origin, iframeId, getToken, getBalance, closeIframe, onPayInvoice);
+      await handleMessage(messageData.message, messageData, origin, elementId, getToken, getBalance, closeIframe, onPayInvoice);
     } catch (e) {
       console.error("THNDR SDK: Error handling message", e);
     }
@@ -133,13 +133,6 @@ export async function initGame(
         postMessage({
           message: MessageTypes.SET_SDK_VERSION,
           version: SDK_VERSION,
-        }, origin, iframeId);
-        break;
-      case MessageTypes.GET_CONFIG:
-        logDebug("Sent config in response to SET_CONFIG");
-        postMessage({
-          message: MessageTypes.SET_CONFIG,
-          config: config,
         }, origin, iframeId);
         break;
       case MessageTypes.GET_TOKEN:
@@ -220,7 +213,6 @@ export function postMessage(messageObject, origin, iframeId) {
     console.error("THNDR SDK: Unable to find the iframe");
   }
 }
-
 
 function waitForElm(selector) {
   return new Promise(resolve => {
