@@ -71,11 +71,6 @@ export async function initGame(
 
   await waitForElm(iframeId);
 
-  postMessage({
-    message: MessageTypes.SET_CONFIG,
-    config,
-  }, origin, iframeId);
-
   /**
    * Logs debug messages to the console when debug mode is enabled.
    *
