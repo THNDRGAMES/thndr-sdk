@@ -3,4 +3,10 @@
 node_modules/
 **/node_modules/ 
 .angular/
-**/.angular/ 
+**/.angular/
+app/sdk/*
+!app/sdk/.gitkeep
+**/app/sdk/*
+!**/app/sdk/.gitkeep
+examples/ionic/angular/src/sdk/thndr-sdk.js
+examples/ionic/angular/src/sdk/thndr-sdk.d.ts 
