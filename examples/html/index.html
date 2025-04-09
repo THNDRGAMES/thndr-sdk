@@ -7,7 +7,7 @@
   </head>
   <body>
     <iframe 
-      src="https://demo-24748543997.us-central1.run.app"
+      src="http://localhost:8100?operatorId=demo&gameId=solitaire&language=en"
       id="games_iframe"
       style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
         Your browser doesn't support iframes
@@ -22,13 +22,6 @@
       // Sandbox URL https://embed-sandbox.clinch.gg     
       // Production URL https://embed.clinch.gg
       
-      const config = {
-        operatorId: "demo",
-        gameId: "solitaire", // "blackjack" "solitaire" or "blocks"
-        iframeId: "games_iframe",
-        THNDRUrl: "https://demo-24748543997.us-central1.run.app",
-        language: "en",
-      };
     
       function getToken() {
         return "demo"; // Replace with your token
@@ -50,10 +43,11 @@
         return false;
       }
 
-      enableLogging(); // Optional, enable logging for debugging
+      //enableLogging(); // Optional, enable logging for debugging
 
       initGame(
-        config,
+        "games_iframe",
+        "http://localhost:8100",
         getToken,
         getBalance,
         closeIframe,
