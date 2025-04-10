@@ -24,6 +24,7 @@ const MessageTypes = Object.freeze({
   CLOSE: "operator_close", // Close the iframe
   HANDLE_ERROR: "operator_handle_error", // Handle errors
   ERROR_HANDLED: "operator_error_handled", // Error handled
+  ANALYTICS_EVENT: "operator_analytics_event", // Analytics event from the iframe
 });
 
 var SDK_VERSION = "2.0.0";
@@ -55,6 +56,7 @@ export function enableLogging() {
  * @param {Function} getBalance - Callback to retrieve the user's balance.
  * @param {Function} closeIframe - Callback to close the iframe.
  * @param {Function} handleError - Callback to handle an error.
+ * @param {Function} [analyticsEvent] - Callback to handle analytics events.
  * @param {Function} [onPayInvoice] - Optional callback to process invoice payments.
  */
 export async function initGame(
@@ -64,6 +66,7 @@ export async function initGame(
   getBalance,
   closeIframe,
   handleError,
+  analyticsEvent,
   onPayInvoice = null
 ) {
   const origin = iframeUrl;
@@ -106,7 +109,7 @@ export async function initGame(
 
     // Handle the message based on its type
     try {
-      await handleMessage(messageData.message, messageData, origin, elementId, getToken, getBalance, closeIframe, onPayInvoice);
+      await handleMessage(messageData.message, messageData, origin, elementId, getToken, getBalance, closeIframe, analyticsEvent, onPayInvoice);
     } catch (e) {
       console.error("THNDR SDK: Error handling message", e);
     }
@@ -123,9 +126,10 @@ export async function initGame(
    * @param {string} iframeId - The iframe id
    * @param {Function} getToken - Callback to retrieve the authentication token.
    * @param {Function} getBalance - Callback to retrieve the user's balance.
+   * @param {Function} analyticsEvent - Callback to handle analytics events.
    * @param {Function} onPayInvoice - Callback to process invoice payments.
    */
-  async function handleMessage(message, messageData, origin, iframeId, getToken, getBalance, closeIframe, onPayInvoice) {
+  async function handleMessage(message, messageData, origin, iframeId, getToken, getBalance, closeIframe, analyticsEvent, onPayInvoice) {
     logDebug(`Handling message: ${message}`);
     switch (message) {
       case MessageTypes.GET_SDK_VERSION:
@@ -170,6 +174,10 @@ export async function initGame(
           message: MessageTypes.ERROR_HANDLED,
           handled: await Promise.resolve(handleError(messageData.data.error)),
         }, origin, iframeId);
+        break;
+      case MessageTypes.ANALYTICS_EVENT:
+        logDebug(`Analytics event received: ${messageData.data.eventName}`);
+        analyticsEvent(messageData.data.eventName);
         break;
       default:
         logDebug(`Unknown message type received: ${message}`);
