@@ -2,12 +2,3 @@
 **/.DS_Store 
 node_modules/
 **/node_modules/ 
-.angular/
-**/.angular/
-app/sdk/*
-!app/sdk/.gitkeep
-**/app/sdk/*
-!**/app/sdk/.gitkeep
-examples/ionic/angular/src/assets/sdk/thndr-sdk.js
-examples/ionic/angular/src/assets/sdk/thndr-sdk.d.ts 
-examples/ionic/angular/src/assets/sdk/thndr-sdk-wrapper.js
