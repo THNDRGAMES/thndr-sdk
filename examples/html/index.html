@@ -7,13 +7,13 @@
   </head>
   <body>
     <iframe 
-      src="https://demo-24748543997.us-central1.run.app"
+      src="https://demo-24748543997.us-central1.run.app?operatorId=demo&gameId=solitaire&language=en"
       id="games_iframe"
       style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
         Your browser doesn't support iframes
     </iframe>
     <script type="module">
-      import { demoBalance, loadClinch, cancelInvoice } from './clinch-sdk.js';
+      import { initGame, enableLogging, demoBalance  } from '/thndr-sdk.js';
     
       // Using the "demo" operatorId will allow you to test the integration with the demo 
       // environment and now s2s required.
@@ -22,23 +22,15 @@
       // Sandbox URL https://embed-sandbox.clinch.gg     
       // Production URL https://embed.clinch.gg
       
-      const config = {
-        operatorId: "demo",
-        gameId: "solitaire", // "blackjack" "solitaire" or "blocks"
-        iframeId: "games_iframe",
-        clinchUrl: "https://demo-24748543997.us-central1.run.app",
-        language: "en",
-        logging: false,
-      };
     
       function getToken() {
-        return "demo"; // Replace with your token
+        return "demo"; // Replace with jwt token
       }
     
       function getBalance() {
         return {
           balance: demoBalance, // Replace with your balance
-          currency: "cents",
+          currency: "cents", // Replace with your currency
         };
       }
     
@@ -51,12 +43,20 @@
         return false;
       }
 
-      loadClinch(
-        config,
+      function analyticsEvent(name) {
+        console.log("Analytics event:", name);
+      }
+
+      //enableLogging(); // Optional, enable logging for debugging
+
+      initGame(
+        "games_iframe",
+        "https://demo-24748543997.us-central1.run.app",
         getToken,
         getBalance,
         closeIframe,
         handleError,
+        analyticsEvent
       );
     </script>
   </body>
