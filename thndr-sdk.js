@@ -22,12 +22,12 @@ const MessageTypes = Object.freeze({
   CANCEL_INVOICE: "operator_cancel_invoice", // Cancel an invoice
   REDIRECT: "operator_redirect", // Redirect the user to a new page
   CLOSE: "operator_close", // Close the iframe
-  HANDLE_ERROR: "operator_handle_error", // Handle errors
-  ERROR_HANDLED: "operator_error_handled", // Error handled
+  HANDLE_PAYMENT_ERROR: "operator_handle_payment_error", // Handle payment errors
+  PAYMENT_ERROR_HANDLED: "operator_payment_error_handled", // Error handled
   ANALYTICS_EVENT: "operator_analytics_event", // Analytics event from the iframe
 });
 
-var SDK_VERSION = "2.0.0";
+var SDK_VERSION = "2.0.1";
 export var demoBalance = 20000; // 200.00 USD
 export var loggingEnabled = false; // Enable logging for debugging
 
@@ -55,7 +55,7 @@ export function enableLogging() {
  * @param {Function} getToken - Callback to retrieve the authentication token.
  * @param {Function} getBalance - Callback to retrieve the user's balance.
  * @param {Function} closeIframe - Callback to close the iframe.
- * @param {Function} handleError - Callback to handle an error.
+ * @param {Function} handlePaymentError - Callback to handle a payment error.
  * @param {Function} [analyticsEvent] - Callback to handle analytics events.
  * @param {Function} [onPayInvoice] - Optional callback to process invoice payments.
  */
@@ -65,7 +65,7 @@ export async function initGame(
   getToken,
   getBalance,
   closeIframe,
-  handleError,
+  handlePaymentError,
   analyticsEvent,
   onPayInvoice = null
 ) {
@@ -168,11 +168,11 @@ export async function initGame(
       case MessageTypes.DEMO_BALANCE_UPDATE:
         demoBalance += messageData.data.balanceInc;
         break;
-      case MessageTypes.HANDLE_ERROR:
-        logDebug("Error received from iframe HANDLE_ERROR");
+      case MessageTypes.HANDLE_PAYMENT_ERROR:
+        logDebug("Error received from iframe HANDLE_PAYMENT_ERROR");
         postMessage({
-          message: MessageTypes.ERROR_HANDLED,
-          handled: await Promise.resolve(handleError(messageData.data.error)),
+          message: MessageTypes.PAYMENT_ERROR_HANDLED,
+          data: await Promise.resolve(handlePaymentError(messageData.data.error)),
         }, origin, iframeId);
         break;
       case MessageTypes.ANALYTICS_EVENT:
