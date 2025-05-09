@@ -22,7 +22,6 @@
       // Demo URL https://demo-24748543997.us-central1.run.app
       // Sandbox URL https://embed-sandbox.clinch.gg     
       // Production URL https://embed.clinch.gg
-      
     
       function getToken() {
         return "demo"; // Replace with jwt token
@@ -39,16 +38,18 @@
         console.log("Close the iFrame");
       }
 
-      function handleError(error) {
-        console.log("Error code", error.code);
-        return false;
+      function handlePaymentError(error) {
+        return {
+          action: "RETRY", // RETRY, GENERIC_ERROR, OPERATOR_ERROR
+          // message: "Custom error meesage defined by the operator." // Custom error message for use with ERROR action only
+        };
       }
 
       function analyticsEvent(name) {
         console.log("Analytics event:", name);
       }
 
-      //enableLogging(); // Optional, enable logging for debugging
+       // enableLogging(); // Optional, enable logging for debugging
 
       initGame(
         "games_iframe",
@@ -56,7 +57,7 @@
         getToken,
         getBalance,
         closeIframe,
-        handleError,
+        handlePaymentError,
         analyticsEvent
       );
     </script>
