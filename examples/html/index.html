@@ -7,7 +7,7 @@
   </head>
   <body>
     <iframe 
-      src="https://demo-24748543997.us-central1.run.app?operatorId=demo&gameId=solitaire&language=en"
+      src="http://localhost:8100?operatorId=betopenly&gameId=blocks&language=en"
       id="games_iframe"
       allow="clipboard-write; clipboard-read;"
       style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
@@ -24,7 +24,7 @@
       // Production URL https://embed.clinch.gg
     
       function getToken() {
-        return "demo"; // Replace with jwt token
+        return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTc0NzEyNTE0NiwiZXhwIjoxNzQ3MTI4NzQ2LCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay11aHlsY0BjbGluY2gtc2FuZC5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInN1YiI6ImZpcmViYXNlLWFkbWluc2RrLXVoeWxjQGNsaW5jaC1zYW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwidWlkIjoiZDdmMTkwNGEtMGI5ZC00ZDI5LThkM2UtYWQyYTE3YTdhY2Y0In0.U3-s8Bwo1LE-pkDKrKxbgv1m51tU6v86kMWDmORFbuXWenjIuCQEl3ReArQ-Yca7Cf9epH8_w11VUbZybZ9WR9DOh1QBS2CHa6IX3DmTgcDTm1kmPN-x-WXPuxcZQvAkRv_9bz-5kjS7r_Xv12Px4lEpXkTV9jZQeRKYautcb2qzIqaQAeos-IgCHys5BKUzxDlb5QeJqGTnKtuoNd1EeUetKLMYyHTmaCPn-MzOcJoENa8lSWyJtPzlxBrt7lZUql7o_jwC6AuB2QCL__H46oqiGLYAl7ZawYeKW-S9jGpJ88Vpt30K1ylYVnehsennVI2VJjFfihej3-Ddk1iAHg"; // Replace with jwt token
       }
     
       function getBalance() {
@@ -40,8 +40,8 @@
 
       function handlePaymentError(error) {
         return {
-          action: "RETRY", // RETRY, GENERIC_ERROR, OPERATOR_ERROR
-          // message: "Custom error meesage defined by the operator." // Custom error message for use with ERROR action only
+          action: "RETRY", // RETRY, GENERIC_ERROR, OPERATOR_ERROR, IGNORE
+          // message: "Custom error meesage defined by the operator." // Custom error message for use with OPERATOR_ERROR action only
         };
       }
 
@@ -53,7 +53,7 @@
 
       initGame(
         "games_iframe",
-        "https://demo-24748543997.us-central1.run.app",
+        "http://localhost:8100",
         getToken,
         getBalance,
         closeIframe,
