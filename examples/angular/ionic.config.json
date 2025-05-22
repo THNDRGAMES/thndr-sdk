@@ -1,0 +1,7 @@
+{
+  "name": "clinch-example",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
