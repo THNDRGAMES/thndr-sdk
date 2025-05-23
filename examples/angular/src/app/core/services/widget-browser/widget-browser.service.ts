@@ -15,7 +15,7 @@ import { assertNever } from 'src/app/common/utils/assert.utils';
 export class WidgetBrowserService {
   private widgetMessengerService = inject(WidgetMessengerService);
 
-  public async startWidget(gameId: GameId, onLoaded: () => void): Promise<void> {
+  public async startWidget(gameId: GameId, onClosed: () => void): Promise<void> {
     try {
       const widgetSrc = await this.widgetMessengerService.generateWidgetUrl(gameId);
 
@@ -55,7 +55,6 @@ export class WidgetBrowserService {
         `,
         });
         loadListener.remove();
-        onLoaded();
       });
 
       await InAppBrowser.addListener('messageFromWebview', async (msg) => {
@@ -77,6 +76,7 @@ export class WidgetBrowserService {
               break;
             case MessageCommandType.CloseWidget:
               await this.closeWidgetBrowser();
+              onClosed();
               break;
             case MessageCommandType.Noop:
               break;
@@ -84,6 +84,8 @@ export class WidgetBrowserService {
               assertNever(command, 'Invalid widget message command');
           }
         } catch (error) {
+          onClosed();
+
           if (error instanceof ZodError) {
             console.error('Validation failed:');
             for (const issue of error.errors) {
@@ -97,7 +99,7 @@ export class WidgetBrowserService {
         }
       });
     } catch (error) {
-      onLoaded();
+      onClosed();
       console.error(`Failed to launch browser`, error);
     }
   }
