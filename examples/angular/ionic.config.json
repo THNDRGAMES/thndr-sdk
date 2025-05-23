@@ -1,0 +1,7 @@
+{
+  "name": "thndr-example",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

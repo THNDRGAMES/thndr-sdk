@@ -1,0 +1,11 @@
+<ion-content [fullscreen]="true" class="no-scroll">
+  <iframe 
+    *ngIf="iframeSrc"
+    #gameIframe
+    [src]="iframeSrc"
+    [id]="iframeId"
+    allow="clipboard-write; clipboard-read;"
+    class="gameIframe">
+      Your browser doesn't support iframes
+  </iframe>
+</ion-content>
