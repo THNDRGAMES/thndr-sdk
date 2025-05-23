@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { WidgetReceiveType, WidgetSendType } from './model/message-types';
+import { GameReceiveType, GameSendType } from './model/message-types';
 import { MessageCommand, MessageCommandType } from './model/message-command';
-import { WidgetPayload } from './model/widget-payload';
+import { ThndrDataPayload } from './model/thndr-data-payload';
 import { SelfSourceError } from '../../../common/errors/self-source-error';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -12,24 +12,23 @@ import { PAGE } from 'src/app/routes';
 @Injectable({
   providedIn: 'root',
 })
-export class WidgetMessengerService {
+export class GameMessengerService {
   private alertController = inject(AlertController);
   private router = inject(Router);
 
   private readonly sdkVersion = '2.0.0';
-  private readonly appSource = 'clinch-example';
+  private readonly appSource = 'thndr-example';
   private readonly operatorId = 'thndr';
-  private readonly widgetUri = 'https://embed-inhouse-24748543997.us-central1.run.app';
+  private readonly gameUri = 'https://embed-24748543997.us-central1.run.app';
 
-  public async generateWidgetUrl(gameId: GameId): Promise<string> {
+  public async generateGameUrl(gameId: GameId): Promise<string> {
     const currentLanguageIso = 'en';
     const platform = 'ios';
-    const widgetUrl = `${this.widgetUri}?operatorId=${this.operatorId}&gameId=${gameId}&language=${currentLanguageIso}&platform=${platform}`;
-    return widgetUrl;
+    return `${this.gameUri}?operatorId=${this.operatorId}&gameId=${gameId}&language=${currentLanguageIso}&platform=${platform}`;
   }
 
-  public async handleWidgetPayload(payload: WidgetPayload): Promise<MessageCommand> {
-    if (payload.origin !== this.widgetUri) {
+  public async handleThndrDataPayload(payload: ThndrDataPayload): Promise<MessageCommand> {
+    if (payload.origin !== this.gameUri) {
       throw new Error(`Invalid origin: ${payload.origin}`);
     }
 
@@ -46,53 +45,51 @@ export class WidgetMessengerService {
     };
 
     switch (payload.data.message) {
-      case WidgetReceiveType.GET_SDK_VERSION:
+      case GameReceiveType.GET_SDK_VERSION:
         return {
           type: MessageCommandType.PostMessage,
-          origin: this.widgetUri,
+          origin: this.gameUri,
           payload: generatePayload({
-            message: WidgetSendType.SET_SDK_VERSION,
+            message: GameSendType.SET_SDK_VERSION,
             version: this.sdkVersion,
           }),
         };
-      case WidgetReceiveType.GET_TOKEN:
+      case GameReceiveType.GET_TOKEN:
         return {
           type: MessageCommandType.PostMessage,
-          origin: this.widgetUri,
+          origin: this.gameUri,
           payload: generatePayload({
-            message: WidgetSendType.SET_TOKEN,
+            message: GameSendType.SET_TOKEN,
             token: await this.generateToken(),
           }),
         };
-      case WidgetReceiveType.GET_BALANCE:
+      case GameReceiveType.GET_BALANCE:
         return {
           type: MessageCommandType.PostMessage,
-          origin: this.widgetUri,
+          origin: this.gameUri,
           payload: generatePayload({
-            message: WidgetSendType.SET_BALANCE,
+            message: GameSendType.SET_BALANCE,
             balance: 0,
             currency: 'cents',
           }),
         };
-      case WidgetReceiveType.DEMO_BALANCE_UPDATE:
-        break;
-      case WidgetReceiveType.PAY_INVOICE:
+      case GameReceiveType.PAY_INVOICE:
         this.payInvoice(payload.data.data.invoice);
         break;
-      case WidgetReceiveType.CANCEL_INVOICE:
+      case GameReceiveType.CANCEL_INVOICE:
         break;
-      case WidgetReceiveType.REDIRECT:
+      case GameReceiveType.REDIRECT:
         return {
-          type: MessageCommandType.CloseWidget,
+          type: MessageCommandType.CloseGame,
         };
-      case WidgetReceiveType.CLOSE:
+      case GameReceiveType.CLOSE:
         return {
-          type: MessageCommandType.CloseWidget,
+          type: MessageCommandType.CloseGame,
         };
-      case WidgetReceiveType.HANDLE_PAYMENT_ERROR:
+      case GameReceiveType.HANDLE_PAYMENT_ERROR:
         await this.showErrorAlert(normalizeError(payload.data.data.error).message);
         break;
-      case WidgetReceiveType.ANALYTICS_EVENT:
+      case GameReceiveType.ANALYTICS_EVENT:
         await this.parseAnalyticsEvent(payload.data.data.eventName);
         break;
     }

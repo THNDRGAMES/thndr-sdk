@@ -8,9 +8,9 @@ const routes: Routes = [
     loadChildren: () => import('./features/home/home.module').then((m) => m.HomePageModule),
   },
   {
-    path: `${PAGE.GAME_VIEWER}/:gameId`,
+    path: `${PAGE.GAME_IFRAME}/:gameId`,
     loadChildren: () =>
-      import('./features/game-viewer/game-viewer.module').then((m) => m.GameViewerPageModule),
+      import('./features/game-iframe/game-iframe.module').then((m) => m.GameIframePageModule),
   },
   {
     path: '',

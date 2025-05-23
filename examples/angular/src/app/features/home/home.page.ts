@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { GameId } from 'src/app/common/model/game-id';
-import { WidgetBrowserService } from 'src/app/core/services/widget-browser/widget-browser.service';
+import { GameBrowserService } from 'src/app/core/services/game-browser/game-browser.service';
 import { PAGE } from 'src/app/routes';
 
 interface GameMetadata {
@@ -17,43 +17,41 @@ interface GameMetadata {
   standalone: false,
 })
 export class HomePage {
-  private widgetBrowserService = inject(WidgetBrowserService);
+  private gameBrowserService = inject(GameBrowserService);
   private router = inject(Router);
 
   gameClicked = false;
-  gamesList: GameMetadata[];
-
-  constructor() {
-    this.gamesList = [
-      {
-        id: GameId.Blackjack,
-        label: 'Blackjack',
-      },
-      {
-        id: GameId.Blocks,
-        label: 'Blocks',
-      },
-      {
-        id: GameId.Solitaire,
-        label: 'Solitaire',
-      },
-    ];
-  }
+  gamesList: GameMetadata[] = [
+    {
+      id: GameId.Blackjack,
+      label: 'Blackjack',
+    },
+    {
+      id: GameId.Blocks,
+      label: 'Blocks',
+    },
+    {
+      id: GameId.Solitaire,
+      label: 'Solitaire',
+    },
+  ];
 
   async onGameClick(gameId: string): Promise<void> {
+    // Prevent multiple clicking
     if (this.gameClicked) {
       return;
     }
     this.gameClicked = true;
 
     if (Capacitor.isNativePlatform()) {
-      await this.widgetBrowserService.startWidget(gameId as GameId, () => {
+      // For native, open the inappbrowser
+      await this.gameBrowserService.startBrowser(gameId as GameId, () => {
         this.gameClicked = false;
       });
-      return;
+    } else {
+      // For web, open an iframe
+      await this.router.navigate([`${PAGE.GAME_IFRAME}/${gameId}`]);
+      this.gameClicked = false;
     }
-
-    await this.router.navigate([`${PAGE.GAME_VIEWER}/${gameId}`]);
-    this.gameClicked = false;
   }
 }

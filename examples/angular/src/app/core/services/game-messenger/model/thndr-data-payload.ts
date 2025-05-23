@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { WidgetDataSchema } from './widget-data';
+import { GameDataSchema } from './game-data';
 
-export const WidgetPayloadSchema = z.object({
+export const ThndrDataPayloadSchema = z.object({
   origin: z.string(),
   data: z.preprocess((raw) => {
     if (typeof raw === 'string') {
@@ -13,7 +13,7 @@ export const WidgetPayloadSchema = z.object({
       }
     }
     return raw;
-  }, WidgetDataSchema),
+  }, GameDataSchema),
 });
 
-export type WidgetPayload = z.infer<typeof WidgetPayloadSchema>;
+export type ThndrDataPayload = z.infer<typeof ThndrDataPayloadSchema>;

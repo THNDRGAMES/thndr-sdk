@@ -1,4 +1,4 @@
 export const PAGE = {
   HOME: 'home',
-  GAME_VIEWER: 'game-viewer',
+  GAME_IFRAME: 'game-iframe',
 } as const;

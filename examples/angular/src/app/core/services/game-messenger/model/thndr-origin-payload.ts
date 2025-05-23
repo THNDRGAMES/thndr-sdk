@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const ThndrPayloadSchema = z.object({
+export const ThndrOriginPayloadSchema = z.object({
   origin: z.string(),
   data: z.preprocess(
     (raw: unknown) => {

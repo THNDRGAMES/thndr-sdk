@@ -6,25 +6,25 @@ import { normalizeError } from 'src/app/common/errors/error-utilities';
 import { GameId } from 'src/app/common/model/game-id';
 import { assertNever } from 'src/app/common/utils/assert.utils';
 import { SelfSourceError } from 'src/app/common/errors/self-source-error';
-import { MessageCommandType } from 'src/app/core/services/widget-messenger/model/message-command';
-import { ThndrPayloadSchema } from 'src/app/core/services/widget-messenger/model/thndr-payload';
-import { WidgetPayloadSchema } from 'src/app/core/services/widget-messenger/model/widget-payload';
-import { WidgetMessengerService } from 'src/app/core/services/widget-messenger/widget-messenger.service';
+import { MessageCommandType } from 'src/app/core/services/game-messenger/model/message-command';
+import { ThndrOriginPayloadSchema } from 'src/app/core/services/game-messenger/model/thndr-origin-payload';
+import { ThndrDataPayloadSchema } from 'src/app/core/services/game-messenger/model/thndr-data-payload';
+import { GameMessengerService } from 'src/app/core/services/game-messenger/game-messenger.service';
 import { PAGE } from 'src/app/routes';
 import { ZodError } from 'zod';
 
 @Component({
-  selector: 'app-game-viewer',
-  templateUrl: './game-viewer.page.html',
-  styleUrls: ['./game-viewer.page.scss'],
+  selector: 'app-game-iframe',
+  templateUrl: './game-iframe.page.html',
+  styleUrls: ['./game-iframe.page.scss'],
 })
-export class GameViewerPage implements OnInit, OnDestroy {
+export class GameIframePage implements OnInit, OnDestroy {
   @ViewChild('gameIframe', { static: false }) iframeRef!: ElementRef<HTMLIFrameElement>;
 
   private activatedRoute = inject(ActivatedRoute);
   private domSanitizer = inject(DomSanitizer);
   private router = inject(Router);
-  private widgetMessengerService = inject(WidgetMessengerService);
+  private gameMessengerService = inject(GameMessengerService);
 
   private destroy$ = new Subject<void>();
 
@@ -35,8 +35,8 @@ export class GameViewerPage implements OnInit, OnDestroy {
     const gameId =
       (this.activatedRoute.snapshot.paramMap.get('gameId') as GameId) ?? GameId.Solitaire;
 
-    const widgetUrl = await this.widgetMessengerService.generateWidgetUrl(gameId);
-    this.iframeSrc = this.domSanitizer.bypassSecurityTrustResourceUrl(widgetUrl);
+    const gameUrl = await this.gameMessengerService.generateGameUrl(gameId);
+    this.iframeSrc = this.domSanitizer.bypassSecurityTrustResourceUrl(gameUrl);
 
     const messages$ = fromEventPattern<MessageEvent>(
       (handler) => window.addEventListener('message', handler),
@@ -54,31 +54,31 @@ export class GameViewerPage implements OnInit, OnDestroy {
 
   private parseMessage = async (event: MessageEvent) => {
     try {
-      const result = ThndrPayloadSchema.safeParse({ data: event.data, origin: event.origin });
+      const result = ThndrOriginPayloadSchema.safeParse({ data: event.data, origin: event.origin });
       if (!result.success) {
         // Check for valid THNDR message types first
         return;
       }
 
-      const command = await this.widgetMessengerService.handleWidgetPayload(
-        WidgetPayloadSchema.parse({ data: event.data, origin: event.origin }),
+      const command = await this.gameMessengerService.handleThndrDataPayload(
+        ThndrDataPayloadSchema.parse({ data: event.data, origin: event.origin }),
       );
 
       switch (command.type) {
         case MessageCommandType.PostMessage:
-          this.postMessageBack(command.payload, command.origin);
+          this.postMessageToIframe(command.payload, command.origin);
           break;
-        case MessageCommandType.CloseWidget:
+        case MessageCommandType.CloseGame:
           this.router.navigate([PAGE.HOME]);
           break;
         case MessageCommandType.Noop:
           break;
         default:
-          assertNever(command, 'Invalid widget message command');
+          assertNever(command, 'Invalid game message command');
       }
     } catch (error) {
       if (error instanceof ZodError) {
-        console.error('Widget validation failed:');
+        console.error('Game data validation failed:');
 
         for (const issue of error.errors) {
           console.error(`> [${issue.path.join('.')}] ${issue.message}`);
@@ -91,7 +91,7 @@ export class GameViewerPage implements OnInit, OnDestroy {
     }
   };
 
-  private postMessageBack(payload: string, origin: string): void {
+  private postMessageToIframe(payload: string, origin: string): void {
     if (this.iframeRef?.nativeElement?.contentWindow) {
       this.iframeRef.nativeElement.contentWindow.postMessage(payload, origin);
     } else {
