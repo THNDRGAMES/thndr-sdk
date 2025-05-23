@@ -17,14 +17,23 @@ export class GameMessengerService {
   private router = inject(Router);
 
   private readonly sdkVersion = '2.0.0';
+
+  //
+  // Configuration
+  //
+  // Change to any variable, used as source during message communication between browser and game
   private readonly appSource = 'thndr-example';
+  // Change to your operatorId
   private readonly operatorId = 'thndr';
-  private readonly gameUri = 'https://embed-24748543997.us-central1.run.app';
+  // URL for THNDR game
+  private readonly gameUri = 'https://embed-sandbox.clinch.gg';
+  // User's chosen language, currently supports [en, de, es, fr, pt, ru]
+  private readonly currentLanguageIso = 'en';
+  // Current platform code [ios, android, desktopweb or mobileweb]
+  private readonly platform = 'ios';
 
   public async generateGameUrl(gameId: GameId): Promise<string> {
-    const currentLanguageIso = 'en';
-    const platform = 'ios';
-    return `${this.gameUri}?operatorId=${this.operatorId}&gameId=${gameId}&language=${currentLanguageIso}&platform=${platform}`;
+    return `${this.gameUri}?operatorId=${this.operatorId}&gameId=${gameId}&language=${this.currentLanguageIso}&platform=${this.platform}`;
   }
 
   public async handleThndrDataPayload(payload: ThndrDataPayload): Promise<MessageCommand> {
@@ -123,6 +132,7 @@ export class GameMessengerService {
   }
 
   private async generateToken(): Promise<string> {
+    // Generate your auth token here
     return '';
   }
 
