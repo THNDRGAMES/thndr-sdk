@@ -27,7 +27,7 @@ const MessageTypes = Object.freeze({
   ANALYTICS_EVENT: "operator_analytics_event", // Analytics event from the iframe
 });
 
-var SDK_VERSION = "2.0.1";
+var SDK_VERSION = "2.0.2";
 export var demoBalance = 20000; // 200.00 USD
 export var loggingEnabled = false; // Enable logging for debugging
 
@@ -170,10 +170,17 @@ export async function initGame(
         break;
       case MessageTypes.HANDLE_PAYMENT_ERROR:
         logDebug("Error received from iframe HANDLE_PAYMENT_ERROR");
-        postMessage({
-          message: MessageTypes.PAYMENT_ERROR_HANDLED,
-          data: await Promise.resolve(handlePaymentError(messageData.data.error)),
-        }, origin, iframeId);
+        const errorAction = await Promise.resolve(handlePaymentError(messageData.data.error));
+        // Expected {  action: "RETRY" | "GENERIC_ERROR" | "OPERATOR_ERROR" | "IGNORE"}
+        const validActions = ["RETRY", "GENERIC_ERROR", "OPERATOR_ERROR", "IGNORE"];
+        if (errorAction.action && validActions.includes(errorAction.action)) {
+          postMessage({
+            message: MessageTypes.PAYMENT_ERROR_HANDLED,
+            data: errorAction,
+          }, origin, iframeId);
+        } else {
+          console.error(`THNDR SDK (v${SDK_VERSION}): Invalid handlePaymentError response received: ${errorAction}. Expected: { action: "${validActions.join('" | "')}" }`);
+        }
         break;
       case MessageTypes.ANALYTICS_EVENT:
         logDebug(`Analytics event received: ${messageData.data.eventName}`);
