@@ -173,7 +173,7 @@ export async function initGame(
         const errorAction = await Promise.resolve(handlePaymentError(messageData.data.error));
         // Expected {  action: "RETRY" | "GENERIC_ERROR" | "OPERATOR_ERROR" | "IGNORE"}
         const validActions = ["RETRY", "GENERIC_ERROR", "OPERATOR_ERROR", "IGNORE"];
-        if (errorAction.action && validActions.includes(errorAction.action)) {
+        if (errorAction?.action && validActions.includes(errorAction.action)) {
           postMessage({
             message: MessageTypes.PAYMENT_ERROR_HANDLED,
             data: errorAction,
