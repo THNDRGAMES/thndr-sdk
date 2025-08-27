@@ -163,7 +163,7 @@ export async function initGame(
         break;
       case MessageTypes.REDIRECT:
       case MessageTypes.CLOSE:
-        closeIframe();
+        closeIframe(messageData.data.name);
         break;
       case MessageTypes.DEMO_BALANCE_UPDATE:
         demoBalance += messageData.data.balanceInc;
