@@ -27,7 +27,7 @@ const MessageTypes = Object.freeze({
   ANALYTICS_EVENT: "operator_analytics_event", // Analytics event from the iframe
 });
 
-var SDK_VERSION = "2.0.3";
+var SDK_VERSION = "2.0.4";
 export var demoBalance = 20000; // 200.00 USD
 export var loggingEnabled = false; // Enable logging for debugging
 
@@ -163,7 +163,7 @@ export async function initGame(
         break;
       case MessageTypes.REDIRECT:
       case MessageTypes.CLOSE:
-        closeIframe();
+        closeIframe(messageData.data.name);
         break;
       case MessageTypes.DEMO_BALANCE_UPDATE:
         demoBalance += messageData.data.balanceInc;
