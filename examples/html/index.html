@@ -34,8 +34,10 @@
         };
       }
     
-      function closeIframe() {
-        console.log("Close the iFrame");
+      function closeIframe(location) {
+        // Either a string "close" or "lobby"
+        // All cases it will return "close" unless the "lobby" feature is enabled for your operator ID.
+        console.log("Close the iFrame", location);
       }
 
       function handlePaymentError(error) {
